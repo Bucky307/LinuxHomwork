@@ -1,0 +1,31 @@
+#!bin/sh
+tm=`date "+%A, %b, %d, %Y: %I%M"`
+if [ $# -eq 0 ]
+then
+ echo 'usage: modify filename [filename...]'
+else
+ for x
+  do
+   if [ -d $x ]
+   then
+    echo "modify: $x, is a directory"
+   elif [ -x $x ]
+   then
+    echo "modify: $x, cannot edit executables"
+   elif [[ `file $x` == *"ASCII text"* ]]
+   then
+   ed -s $x << END
+\$a
+Modified on: $tm
+Modified by: Buck Harris
+.
+1m2
+w
+q
+END
+sed -i 's/Grades/Grades/g' $x
+  else
+   echo "modify: $x, filetype not supported."
+  fi
+ done
+fi
