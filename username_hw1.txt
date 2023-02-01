@@ -1,7 +1,0 @@
-1) find -name '*.tex'
-2) grep -n "tomato" file1.tex ./nest1/file4.tex
-3) grep -v "pepper" file1.tex ./nest1/file4/tex | wc -l
-4) find -name '*.txt' -exec grep -H "Grade" {} +
-5) cat p5.txt ./nest1/p5_2.txt | tr '[:upper:]' '[:lower:]'
-6) sort -n -r -k 1.2,1.6 p6.txt
-7) cut -d ',' -f3 p7.txt | sort -u
