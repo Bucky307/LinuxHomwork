@@ -23,7 +23,7 @@ Modified by: Buck Harris
 w
 q
 END
-sed -i 's/Grades/Grades/g' $x
+sed -i 's/Gradez/Grades/g' $x
   else
    echo "modify: $x, filetype not supported."
   fi
