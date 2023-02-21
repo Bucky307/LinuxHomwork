@@ -1,0 +1,9 @@
+hw4_pcode.txt
+Author: Buck Harris
+Date Feb 17, 2023
+
+COSC 3750, Homework 4
+
+This is the psudocode for the wycat.c program
+
+
