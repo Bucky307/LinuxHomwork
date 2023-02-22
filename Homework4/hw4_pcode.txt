@@ -1,9 +1,34 @@
-hw4_pcode.txt
-Author: Buck Harris
-Date Feb 17, 2023
+* hw4_pcode.txt
+* Author: Buck Harris
+* Date Feb 17, 2023
+*
+* COSC 3750, Homework 4
+*
+* This is the psudocode for the wycat.c program
 
-COSC 3750, Homework 4
 
-This is the psudocode for the wycat.c program
+Psudocode for the main function:
+ If there is one argument:
+  call read write function with stdin.
+ else:
+  for all the arguments:
+   if the argument is "-":
+    call read write function with stdin.
+   else:
+    Open the file.
+    if a file cannot be opened:
+     print an error.
+    else:
+     call read write function with the file. 
+ Close the file.
 
+Psudocode for the "read write function":
+ do:
+  read from the file passed to function.
+  if there was an error reading:
+   print an error.
+  write the contents of the file.
+  if there was an error in writing:
+   print an error.
+ while there is still things to read. 
 
