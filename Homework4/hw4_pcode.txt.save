@@ -1,0 +1,26 @@
+* hw4_pcode.txt
+* Author: Buck Harris
+* Date Feb 17, 2023
+*
+* COSC 3750, Homework 4
+*
+* This is the psudocode for the wycat.c program
+
+
+Psudocode for the main function:
+ If argc equals 1:
+  call read write function with stdin.
+ else:
+  for one up to argc:
+   if argv at loop position equals "-":
+    call read write function with stdin.
+   else:
+    Open the file at argv at loop position.
+    if a file isnt opened:
+     print an error.
+    else:
+     call read write function with file. 
+ Close the file.
+
+Psudocode for the "read write funtion":
+
