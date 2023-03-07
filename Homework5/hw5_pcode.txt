@@ -1,0 +1,88 @@
+* hw5_pcode.txt
+* Author: Buck Harris
+* Date Mar 5, 2023
+*
+* COSC 3750, Homework 5
+*
+* This is the psudocode for the wyls.c program
+
+
+Psudocode for the main function:
+ for the length of argc:
+  if the element is a -:
+   while there isnt a whitespace:
+    if the next thing is a n:
+     set a flag saying an n was found.
+    else if the element was an h:
+     set a flag saying h was found.
+    else:
+     print an error and stop program.
+  else:
+   if is is a directory:
+    call "listing a directory".
+   else:
+    call "formatint printing".
+ end of the for loop.
+ if no current working directory:
+  print an error and close.
+ else:
+  call format print with the currrent working directory.
+
+
+Psudocode for "listing the directory":
+ Open directory.
+ if the directory is valid:
+  while there are things to read from directory:
+   call fromat print with entry.
+  end of while.
+ else
+  print error
+ Close directory.
+
+Psudocode for the formating printing:
+ Call permission.
+ Call n option.
+ Call h option.
+ Call date and time.
+ Print the filename and what it links to if 
+ it is a link.
+
+Psudocode for the permission:
+ if it is a directory:
+  print d.
+ else if it is a list:
+  print l.
+ else:
+  print -.
+ if first permission is read:
+  print r.
+ else:
+  print -.
+ if second permission is w:
+  print w.
+ else 
+  print -.
+ if third permission is x:
+  print x.
+ else:
+  print -.
+ Continue this patten 2 more time for rwx.
+
+Psudocode date and time:
+ if the date is past 180 days:
+  print correct date.
+ else:
+  print correct formatting.
+
+Psudocode for the n option:
+ if the n option wasn't given:
+  print the user and group.
+ else 
+  print the user ID and group ID.
+
+Psudocode for the h option:
+ if the h option wasn't given:
+  print the size.
+ else:
+  print the size with K, M, or G.
+
