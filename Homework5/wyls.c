@@ -1,9 +1,9 @@
 /*
- * wycat.c
+ * wyls.c
  * Author: Buck Harris
- * Date: Feb 17, 2023
+ * Date: Feb 25, 2023
  *
- * COSC 3750, Homework 4
+ * COSC 3750, Homework 5
  *
  * This is a simple version of the ls utility. It is designed to
  * take any amount of directories and options of n and h and

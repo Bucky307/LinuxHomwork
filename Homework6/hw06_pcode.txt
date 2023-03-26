@@ -1,10 +1,50 @@
-/*
-* hw06_pcode.txt
-* Author: Connor Thorpen
-* Date: Mar 7, 2023
-*
-* COSC 3750, Homework 5
-*
-* This document contains the pseudocode of the wytar program.
-*
-*/
+* tar_pcode.txt
+* Author: Buck Harris
+* Date: Mar 17, 2023
+* COSC 3750, Homework 6
+* This is the pseudocode for the tar archiving and extraction program
+
+Pseudocode for the main function:
+ Parse command-line arguments.
+ If user specifies extraction option:
+  Call extract function with input tar file.
+ Else (user specifies archive option):
+  Create new tar file.
+ For each argument (file or directory):
+  Get the object's metadata using stat.
+  If object is a file:
+   Call archiveFile function with file and metadata.
+  Else if object is a directory:
+   Call archiveDirectory function with directory and metadata.
+  Write two empty 512-byte blocks to mark the end of the tar file.
+ Close the tar file.
+
+Pseudocode for the "archiveFile" function:
+ Create tar_header struct and fill with metadata.
+ Calculate and store the header checksum.
+ Write header to the tar file.
+ Write the file's content to the tar file.
+ Pad the file's content with NULL bytes if necessary.
+
+Pseudocode for the "archiveDirectory" function:
+ Create tar_header struct and fill with metadata.
+ Calculate and store the header checksum.
+ Write header to the tar file.
+ For each entry in the directory:
+ If entry is a file:
+  Call archiveFile function with file and metadata.
+ Else if entry is a subdirectory:
+ Call archiveDirectory function with subdirectory and metadata.
+
+Pseudocode for the "extract" function:
+ Read tar_header from input tar file.
+ While the header is not the end-of-archive marker:
+  Create the output file or directory based on header metadata.
+  If object is a file:
+  Read the file's content from the input tar file and write it
+  to the output file.
+  Skip any padding in the input tar file.
+  Read the next tar_header from the input tar file.
+
+
+
