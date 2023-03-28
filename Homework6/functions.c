@@ -1,12 +1,12 @@
 /*
- * wycat.c
+ * wytar.c
  * Author: Buck Harris
- * Date: Mar 17, 2023
+ * Date: Mar 28, 2023
  *
  * COSC 3750, Homework 6
  *
  * This will either archive or extract file(s)
- * ,just like how the built in tar function does,
+ * just like how the built in tar function does,
  * depending on what option the user uses.
  *
  */
@@ -14,6 +14,7 @@
 #include "functions.h"
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<unistd.h>
@@ -22,6 +23,7 @@
 #include<tar.h>
 #include<grp.h>
 #include<pwd.h>
+#include<utime.h>
 
 //Function for Archiving Directories
 void archiveDirectory(FILE* archive, char* objName, struct stat st)
@@ -295,7 +297,6 @@ void archiveFile(FILE* archive, char* objName, struct stat st)
  }
 }
 
-
 //Function
 void extract(char* archiveName)
 {
@@ -332,7 +333,7 @@ void extract(char* archiveName)
    char calcCheckSum[8];
    memset(header_ptr->chksum, ' ', 8);
    unsigned int sum = 0;
-   for (int i = 0; i < 512, i++)
+   for (int i = 0; i < 512; i++)
     sum += buf[i];
    snprintf(calcCheckSum, 8, "%06o", (int)sum);
    if (strcmp(calcCheckSum, checkSum) != 0)
@@ -343,19 +344,22 @@ void extract(char* archiveName)
    if (header_ptr->prefix[0] != '\0')
     snprintf(name, 255, "%s/%s", header_ptr->prefix, header_ptr->name);
    else
-    snprintf(name, 255, "%s/%s", header->name);
+    snprintf(name, 255, "%s", header_ptr->name);
    //Extract parent to get to root parent
    extractParent(name);
+
+   int mode, uid, gid;
+   sscanf(header_ptr->mode, "%o", &mode);
+   sscanf(header_ptr->uid, "%o", &uid);
+   sscanf(header_ptr->gid, "%o", &gid);
    if(header_ptr->typeflag == DIRTYPE)
    {
-    int mode;
-    sscanf(header_ptr->mode, "%o", &mode);
     struct stat st;
     if (stat(name, &st) == -1) // Check if directory does not exist
     {
      if (mkdir(name, mode) == -1)
      {
-      fprintf(stderr, "Error extracting directory: %s - %s\n",name);
+       fprintf(stderr, "Error extracting directory: %s\n",name);
      }
     }
     else
@@ -364,6 +368,25 @@ void extract(char* archiveName)
      {
       fprintf(stderr, "Error: %s exists but is not a directory\n", name);
      }
+     else
+     {
+      if(chmod(name, mode) == -1) // Set permissions
+       fprintf(stderr, "Error setting permissions.\n");
+     }
+    }
+
+    if(chown(name, uid, gid) == -1) // Set user and group
+     fprintf(stderr, "Error extracting user id: %d and group id: %d.\n",
+     uid, gid);
+
+    struct utimbuf timebuf;
+    time_t mtime;
+    sscanf(header_ptr->mtime, "%lo", &mtime);
+    timebuf.actime = mtime;
+    timebuf.modtime = mtime;
+    if (utime(name, &timebuf) == -1)
+    {
+     fprintf(stderr, "Error setting modification time for %s.\n", name);
     }
    }
    else if(header_ptr->typeflag == SYMTYPE)
@@ -390,7 +413,7 @@ void extract(char* archiveName)
      char contents[512];
      int size;
      sscanf(header_ptr->size, "%o", &size);
-     for(int i = 0; i < size/512 + 1; i ++)
+     for(int i = 0; i < (size+511)/512; i ++)
      {
       rRet = fread(contents, 1, 512, archive);
       if(rRet < 512)
@@ -418,6 +441,20 @@ void extract(char* archiveName)
       }
      }
      fclose(newFile);
+     if(chmod(name, mode) == -1) // Set permissions
+      fprintf(stderr, "Error setting permissions.\n");
+     if(chown(name, uid, gid) == -1) // Set user and group
+      fprintf(stderr, "Error extracting user id: %d and group id: %d.\n",
+      uid, gid);
+     struct utimbuf timebuf;
+     time_t mtime;
+     sscanf(header_ptr->mtime, "%lo", &mtime);
+     timebuf.actime = mtime;
+     timebuf.modtime = mtime;
+     if (utime(name, &timebuf) == -1)
+     {
+      fprintf(stderr, "Error setting modification time for %s.\n", name);
+     }
     }
    }
   }while(readReturn == 512);
@@ -445,7 +482,7 @@ void extractParent(char* parentPath)
     int mode = 0777; // Default mode
     if (mkdir(parentPathCopy, mode) == -1)
     {
-     fprintf(stderr, "Error creating directory: %s - %s\n", parentPathCopy);
+     fprintf(stderr, "Error creating directory: %s\n", parentPathCopy);
     }
    }
   }

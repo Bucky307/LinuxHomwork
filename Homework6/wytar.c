@@ -1,11 +1,14 @@
 /*
 * wytar.c
-* Author: Connor Thorpen
-* Date: Mar 13, 2023
+* Author: Buck Harris
+* Date: Mar 28, 2023
 *
-* COSC 3750, Homework 5
+* COSC 3750, Homework 6
 *
-* This is a simple version of the tar utility.
+* This is the main function for the
+* tar utility. It handles the options and
+* calls the correct funcion to do what the
+* user asked for.
 */
 
 #include "tar_header.h"
